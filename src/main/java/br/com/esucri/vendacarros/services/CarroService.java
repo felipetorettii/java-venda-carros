@@ -21,8 +21,8 @@ public class CarroService {
         return carro;
     }
 
-    public void remove(Carro carro) {
-        entityManager.remove(carro);
+    public void remove(Long id, Carro carro) {
+        entityManager.remove(findById(id));
     }
 
     public Carro update(Carro carroAtualizado) {

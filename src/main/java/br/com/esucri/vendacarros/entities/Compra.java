@@ -15,6 +15,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -32,7 +33,7 @@ public class Compra implements Serializable{
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COMPRA_SEQ")
     private Long id;
     
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
     private Vendedor vendedor;
     
     @OneToOne(optional = false)

@@ -29,8 +29,8 @@ public class CompraService {
         return compra;
     }
 
-    public void remove(Compra compra) {
-        entityManager.remove(compra);
+    public void remove(Long id, Compra compra) {
+        entityManager.remove(findById(id));
     }
 
     public Compra update(Compra compraAtualizada) {

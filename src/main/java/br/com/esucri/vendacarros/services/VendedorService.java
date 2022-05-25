@@ -28,8 +28,8 @@ public class VendedorService {
         return vendedor;
     }
 
-    public void remove(Vendedor vendedor) {
-        entityManager.remove(vendedor);
+    public void remove(Long id, Vendedor vendedor) {
+        entityManager.remove(findById(id));
     }
 
     public Vendedor update(Vendedor vendedorAtualizado) {

@@ -36,7 +36,7 @@ public class Carro implements Serializable {
     private Integer ano;
     
     @Column(nullable = false)
-    private Boolean vendido = false;
+    private Boolean vendido;
     
     @Column
     private String foto;

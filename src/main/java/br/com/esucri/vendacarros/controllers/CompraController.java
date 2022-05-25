@@ -60,7 +60,7 @@ public class CompraController {
         if (compra == null) {
             throw new WebApplicationException("Compra não encontrada!", Response.Status.NOT_FOUND);
         }
-        this.compraService.remove(compra);
+        this.compraService.remove(id, compra);
     }
 
     @PUT

@@ -61,7 +61,7 @@ public class VendedorController {
         if (vendedor == null) {
             throw new WebApplicationException("Vendedor não encontrado!", Response.Status.NOT_FOUND);
         }
-        this.vendedorService.remove(vendedor);
+        this.vendedorService.remove(id, vendedor);
     }
 
     @PUT

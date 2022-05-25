@@ -53,7 +53,7 @@ public class CarroController {
         if (carroSalvo == null) {
             throw new WebApplicationException("Carro não encontrado!", Response.Status.NOT_FOUND);
         }
-        this.carroService.remove(carroSalvo);
+        this.carroService.remove(id, carroSalvo);
     }
 
     @PUT
