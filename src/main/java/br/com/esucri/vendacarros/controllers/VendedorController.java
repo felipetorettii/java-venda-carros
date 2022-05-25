@@ -2,8 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package br.com.esucri.vendacarros.vendedores;
+package br.com.esucri.vendacarros.controllers;
 
+import br.com.esucri.vendacarros.services.VendedorService;
+import br.com.esucri.vendacarros.entities.Vendedor;
 import java.util.List;
 import javax.inject.Inject;
 import javax.ws.rs.BadRequestException;
@@ -55,13 +57,22 @@ public class VendedorController {
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Long id) {
-        this.vendedorService.remove(id);
+        Vendedor vendedor = this.vendedorService.findById(id);
+        if (vendedor == null) {
+            throw new WebApplicationException("Vendedor não encontrado!", Response.Status.NOT_FOUND);
+        }
+        this.vendedorService.remove(vendedor);
     }
 
     @PUT
     @Path("{id}")
     public Vendedor update(@PathParam("id") Long id, Vendedor vendedorAtualizado) {
-        return this.vendedorService.update(id, vendedorAtualizado);
+        Vendedor vendedorSalvo = findById(id);
+        if (vendedorSalvo == null) {
+            throw new WebApplicationException("Vendedor não encontrado!", Response.Status.NOT_FOUND);
+        }
+        vendedorAtualizado.setId(vendedorSalvo.getId());
+        return this.vendedorService.update(vendedorAtualizado);
     }
 
     @GET

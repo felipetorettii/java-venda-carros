@@ -1,14 +1,12 @@
-package br.com.esucri.vendacarros.vendedores;
+package br.com.esucri.vendacarros.entities;
 
-import br.com.esucri.vendacarros.carros.TipoCarro;
-import java.math.BigDecimal;
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 /*
@@ -22,10 +20,11 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "vendedores", schema = "public")
-public class Vendedor {
+@SequenceGenerator(name="VENDEDOR_SEQ", sequenceName="VENDEDOR_SEQ")
+public class Vendedor implements Serializable{
     
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "VENDEDOR_SEQ")
     private Long id;
     
     @Column(nullable = false)

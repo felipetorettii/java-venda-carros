@@ -1,5 +1,6 @@
-package br.com.esucri.vendacarros.carros;
+package br.com.esucri.vendacarros.entities;
 
+import br.com.esucri.vendacarros.enums.TipoCarro;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Column;
@@ -9,21 +10,23 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "carros", schema = "public")
+@SequenceGenerator(name="CARRO_SEQ", sequenceName="CARRO_SEQ")
 public class Carro implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CARRO_SEQ")
     private Long id;
     
     @Column(nullable = false)
     private String nome;
     
     @Column(nullable = false)
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private TipoCarro tipoCarro;
     
     @Column(nullable = false)

@@ -2,7 +2,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package br.com.esucri.vendacarros.vendedores;
+package br.com.esucri.vendacarros.services;
+import br.com.esucri.vendacarros.entities.Vendedor;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -27,13 +28,11 @@ public class VendedorService {
         return vendedor;
     }
 
-    public void remove(Long id) {
-        entityManager.remove(findById(id));
+    public void remove(Vendedor vendedor) {
+        entityManager.remove(vendedor);
     }
 
-    public Vendedor update(Long id, Vendedor vendedorAtualizado) {
-        Vendedor vendedorSalvo = findById(id);
-        vendedorAtualizado.setId(vendedorSalvo.getId());
+    public Vendedor update(Vendedor vendedorAtualizado) {
         entityManager.merge(vendedorAtualizado);
         return vendedorAtualizado;
     }

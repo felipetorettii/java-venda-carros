@@ -1,5 +1,7 @@
-package br.com.esucri.vendacarros.carros;
+package br.com.esucri.vendacarros.controllers;
 
+import br.com.esucri.vendacarros.services.CarroService;
+import br.com.esucri.vendacarros.entities.Carro;
 import java.util.List;
 import javax.inject.Inject;
 import javax.ws.rs.BadRequestException;
@@ -47,13 +49,22 @@ public class CarroController {
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Long id) {
-        this.carroService.remove(id);
+        Carro carroSalvo = findById(id);
+        if (carroSalvo == null) {
+            throw new WebApplicationException("Carro não encontrado!", Response.Status.NOT_FOUND);
+        }
+        this.carroService.remove(carroSalvo);
     }
 
     @PUT
     @Path("{id}")
     public Carro update(@PathParam("id") Long id, Carro carroAtualizado) {
-        return this.carroService.update(id, carroAtualizado);
+        Carro carroSalvo = findById(id);
+        if (carroSalvo == null) {
+            throw new WebApplicationException("Carro não encontrado!", Response.Status.NOT_FOUND);
+        }
+        carroAtualizado.setId(carroSalvo.getId());
+        return this.carroService.update(carroAtualizado);
     }
 
     @GET

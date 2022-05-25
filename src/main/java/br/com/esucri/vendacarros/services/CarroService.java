@@ -1,5 +1,6 @@
-package br.com.esucri.vendacarros.carros;
+package br.com.esucri.vendacarros.services;
 
+import br.com.esucri.vendacarros.entities.Carro;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -20,13 +21,11 @@ public class CarroService {
         return carro;
     }
 
-    public void remove(Long id) {
-        entityManager.remove(findById(id));
+    public void remove(Carro carro) {
+        entityManager.remove(carro);
     }
 
-    public Carro update(Long id, Carro carroAtualizado) {
-        Carro carroSalvo = findById(id);
-        carroAtualizado.setId(carroSalvo.getId());
+    public Carro update(Carro carroAtualizado) {
         entityManager.merge(carroAtualizado);
         return carroAtualizado;
     }
