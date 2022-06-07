@@ -9,6 +9,8 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.NotFoundException;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 
 /**
  *
@@ -31,8 +33,28 @@ public class VendedorService {
     }
 
     public Vendedor add(Vendedor vendedor) {
+        validaCPF(vendedor);
+        validaTelefone(vendedor);
         entityManager.persist(vendedor);
         return vendedor;
+    }
+    
+    private void validaCPF(Vendedor vendedor) {
+        if(vendedor.getCpf().length() != 11) {
+            throw new WebApplicationException(
+                    "CPF inválido",
+                    Response.Status.CONFLICT
+            );   
+        }
+    }
+    
+    private void validaTelefone(Vendedor vendedor) {
+        if(vendedor.getTelefone().length() < 8) {
+            throw new WebApplicationException(
+                    "Telefone inválido",
+                    Response.Status.CONFLICT
+            );   
+        }
     }
 
     public void remove(Long id, Vendedor vendedor) {
@@ -40,6 +62,8 @@ public class VendedorService {
     }
 
     public Vendedor update(Vendedor vendedorAtualizado) {
+        validaCPF(vendedorAtualizado);
+        validaTelefone(vendedor);
         entityManager.merge(vendedorAtualizado);
         return vendedorAtualizado;
     }
