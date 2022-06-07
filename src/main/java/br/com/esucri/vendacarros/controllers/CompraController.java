@@ -16,9 +16,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 /**
  *
@@ -40,38 +38,24 @@ public class CompraController {
     @GET
     @Path("{id}")
     public Compra findById(@PathParam("id") Long id) {
-        Compra compra = this.compraService.findById(id);
-        if (compra == null) {
-            throw new WebApplicationException("compra não encontrada!", Response.Status.NOT_FOUND);
-        }
-        return compra;
+        return this.compraService.findById(id);
     }
 
     @POST
     public Compra add(Compra compra) {
-        Compra retorno = this.compraService.add(compra);
-        return retorno;
+        return this.compraService.add(compra);
     }
 
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Long id) {
-        Compra compra = this.compraService.findById(id);
-        if (compra == null) {
-            throw new WebApplicationException("Compra não encontrada!", Response.Status.NOT_FOUND);
-        }
-        this.compraService.remove(id, compra);
+        this.compraService.remove(id);
     }
 
     @PUT
     @Path("{id}")
     public Compra update(@PathParam("id") Long id, Compra compraAtualizado) {
-        Compra compraSalva = findById(id);
-        if (compraSalva == null) {
-            throw new WebApplicationException("Compra não encontrado!", Response.Status.NOT_FOUND);
-        }
-        compraAtualizado.setId(compraSalva.getId());
-        return this.compraService.update(compraAtualizado);
+        return this.compraService.update(id, compraAtualizado);
     }
     
 }

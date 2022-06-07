@@ -7,8 +7,11 @@ package br.com.esucri.vendacarros.services;
 import br.com.esucri.vendacarros.entities.Carro;
 import br.com.esucri.vendacarros.entities.Compra;
 import br.com.esucri.vendacarros.enums.FormaPagamento;
+import br.com.esucri.vendacarros.exceptions.ErroMessage;
+import br.com.esucri.vendacarros.exceptions.RestException;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,46 +30,46 @@ public class CompraService {
     private EntityManager entityManager;
     
     public Compra findById(Long id) {
-        Compra entity = entityManager.find(Compra.class, id);
-        
-        if(entity == null) {
-            throw new NotFoundException("Compra com o id " + id + " não encontrado");
+        Compra compra = entityManager.find(Compra.class, id);
+        if (Objects.isNull(compra)) {
+            throw new RestException(new ErroMessage("Compra não encontrada!"), Response.Status.NOT_FOUND);
         }
-        
-        return entity;
+        return compra;
     }
 
     public Compra add(Compra compra) {
         validaCarro(compra.getCarro());
         validaDesconto(compra);
-        
         entityManager.persist(compra);
         return compra;
     }
     
-    private void validaCarro(Carro carro) {
-        if (carro.getVendido()) {
-            throw new WebApplicationException(
-                    "O carro já está vendido",
-                    Response.Status.CONFLICT
-            );            
+    private String validaCarro(Carro carro) {
+        Carro carroSalvo = entityManager.find(Carro.class, carro.getId());
+        if (Objects.isNull(carroSalvo)) {
+            throw new RestException(new ErroMessage("Carro não encontrado!"), Response.Status.BAD_REQUEST);
         }
+        if (carroSalvo.getVendido()) {
+            throw new RestException(new ErroMessage("Carro já foi vendido!"), Response.Status.BAD_REQUEST);
+        }
+        return "";
     }
     
-    private void validaDesconto(Compra compra) {
-        if ((compra.getFormaPagamento() == FormaPagamento.A_PRAZO) && (compra.getDesconto().compareTo(BigDecimal.valueOf(50l)) == 1 )) {
-            throw new WebApplicationException(
-                    "Só pode receber desconto maior que 50% pagamento a vista",
-                    Response.Status.CONFLICT
-            );            
+    private String validaDesconto(Compra compra) {
+        if ((compra.getFormaPagamento() == FormaPagamento.A_PRAZO) && (compra.getDesconto().compareTo(BigDecimal.ZERO) == 1 )) {
+            throw new RestException(new ErroMessage("Desconto só pode ser aplicado à vista!"), Response.Status.BAD_REQUEST);
         }
+        return "";
     }
 
-    public void remove(Long id, Compra compra) {
+    public void remove(Long id) {
+        findById(id);
         entityManager.remove(findById(id));
     }
 
-    public Compra update(Compra compraAtualizada) {
+    public Compra update(Long id, Compra compraAtualizada) {
+        Compra compraSalva = findById(id);
+        compraAtualizada.setId(compraSalva.getId());
         entityManager.merge(compraAtualizada);
         return compraAtualizada;
     }
