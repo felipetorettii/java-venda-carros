@@ -8,6 +8,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.ws.rs.NotFoundException;
 
 /**
  *
@@ -20,7 +21,13 @@ public class VendedorService {
     private EntityManager entityManager;
 
     public Vendedor findById(Long id) {
-        return entityManager.find(Vendedor.class, id);
+        Vendedor entity = entityManager.find(Vendedor.class, id);
+        
+        if(entity == null) {
+            throw new NotFoundException("Vendedor com o id " + id + " não encontrado");
+        }
+        
+        return entity;
     }
 
     public Vendedor add(Vendedor vendedor) {

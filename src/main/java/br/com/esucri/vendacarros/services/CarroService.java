@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.ws.rs.NotFoundException;
 
 @Stateless
 public class CarroService {
@@ -13,7 +14,13 @@ public class CarroService {
     private EntityManager entityManager;
 
     public Carro findById(Long id) {
-        return entityManager.find(Carro.class, id);
+        Carro entity = entityManager.find(Carro.class, id);
+        
+        if(entity == null) {
+            throw new NotFoundException("Carro com o id " + id + " não encontrado");
+        }
+        
+        return entity;
     }
 
     public Carro add(Carro carro) {
