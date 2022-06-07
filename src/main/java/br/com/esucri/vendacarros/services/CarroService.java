@@ -31,18 +31,16 @@ public class CarroService {
         return carro;
     }
     
-    private String validaPreco(Carro carro) {
+    private void validaPreco(Carro carro) {
         if (carro.getPreco().compareTo(BigDecimal.ZERO) != 1) {
             throw new RestException(new ErroMessage("O preço do carro não pode ser menor ou igual a 0!"), Response.Status.BAD_REQUEST);
         }
-        return "";
     }
     
-    private String validaVendido(Carro carro) {
+    private void validaVendido(Carro carro) {
         if (carro.getVendido()) {
             throw new RestException(new ErroMessage("O carro já foi vendido não podendo ser excluido!"), Response.Status.BAD_REQUEST);
         }
-        return "";
     }
     
 
