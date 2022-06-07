@@ -63,7 +63,7 @@ public class VendedorService {
 
     public Vendedor update(Vendedor vendedorAtualizado) {
         validaCPF(vendedorAtualizado);
-        validaTelefone(vendedor);
+        validaTelefone(vendedorAtualizado);
         entityManager.merge(vendedorAtualizado);
         return vendedorAtualizado;
     }
