@@ -7,6 +7,7 @@ import br.com.esucri.vendacarros.enums.FormaPagamento;
 import br.com.esucri.vendacarros.exceptions.ErroMessage;
 import br.com.esucri.vendacarros.exceptions.RestException;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import javax.ejb.Stateless;
@@ -33,7 +34,7 @@ public class CompraService {
     }
 
     public Compra add(Compra compra) {
-        validaCompra(compra);
+        validacoesCompra(compra);
         entityManager.persist(compra);
         atualizaCarro(compra);
         return compra;
@@ -55,18 +56,11 @@ public class CompraService {
                 .createQuery("SELECT c FROM Compra c", Compra.class)
                 .getResultList();
     }
-   
-    private List<Compra> findCompraByCarro(Long idCarro) {
-        return entityManager
-                .createQuery("SELECT c FROM Compra c where c.carro.id = :idCarro", Compra.class)
-                .setParameter("idCarro", idCarro)
-                .getResultList();
-    }
     
-    private void validaCompra(Compra compra) {
+    private void validacoesCompra(Compra compra) {
         validaVendedor(compra.getVendedor());
         validaCarro(compra.getCarro());
-        validaDesconto(compra);
+        validaCompra(compra);
     }
     
     private void validaVendedor(Vendedor vendedor) {
@@ -84,14 +78,14 @@ public class CompraService {
         if (carroSalvo.getVendido()) {
             throw new RestException(new ErroMessage("Carro já foi vendido!"), Response.Status.BAD_REQUEST);
         }
-        if (!findCompraByCarro(carro.getId()).isEmpty()) {
-            throw new RestException(new ErroMessage("Carro já foi vendido!"), Response.Status.BAD_REQUEST);
-        }
     }
     
-    private String validaDesconto(Compra compra) {
+    private String validaCompra(Compra compra) {
         if ((compra.getFormaPagamento() == FormaPagamento.A_PRAZO) && (compra.getDesconto().compareTo(BigDecimal.ZERO) == 1 )) {
             throw new RestException(new ErroMessage("Desconto só pode ser aplicado à vista!"), Response.Status.BAD_REQUEST);
+        }
+        if (compra.getDataCompra().isAfter(LocalDate.now())) {
+            throw new RestException(new ErroMessage("A data da compra não pode ser futura!"), Response.Status.BAD_REQUEST);
         }
         return "";
     }
