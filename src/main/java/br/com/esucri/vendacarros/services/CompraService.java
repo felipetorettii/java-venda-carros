@@ -1,22 +1,18 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package br.com.esucri.vendacarros.services;
 
 import br.com.esucri.vendacarros.entities.Carro;
 import br.com.esucri.vendacarros.entities.Compra;
+import br.com.esucri.vendacarros.entities.Vendedor;
 import br.com.esucri.vendacarros.enums.FormaPagamento;
 import br.com.esucri.vendacarros.exceptions.ErroMessage;
 import br.com.esucri.vendacarros.exceptions.RestException;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.ws.rs.NotFoundException;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 /**
@@ -38,32 +34,13 @@ public class CompraService {
     }
 
     public Compra add(Compra compra) {
-        validaCarro(compra.getCarro());
-        validaDesconto(compra);
+        validacoesCompra(compra);
         entityManager.persist(compra);
+        atualizaCarro(compra);
         return compra;
-    }
-    
-    private String validaCarro(Carro carro) {
-        Carro carroSalvo = entityManager.find(Carro.class, carro.getId());
-        if (Objects.isNull(carroSalvo)) {
-            throw new RestException(new ErroMessage("Carro não encontrado!"), Response.Status.BAD_REQUEST);
-        }
-        if (carroSalvo.getVendido()) {
-            throw new RestException(new ErroMessage("Carro já foi vendido!"), Response.Status.BAD_REQUEST);
-        }
-        return "";
-    }
-    
-    private String validaDesconto(Compra compra) {
-        if ((compra.getFormaPagamento() == FormaPagamento.A_PRAZO) && (compra.getDesconto().compareTo(BigDecimal.ZERO) == 1 )) {
-            throw new RestException(new ErroMessage("Desconto só pode ser aplicado à vista!"), Response.Status.BAD_REQUEST);
-        }
-        return "";
     }
 
     public void remove(Long id) {
-        findById(id);
         entityManager.remove(findById(id));
     }
 
@@ -78,6 +55,45 @@ public class CompraService {
         return entityManager
                 .createQuery("SELECT c FROM Compra c", Compra.class)
                 .getResultList();
+    }
+    
+    private void validacoesCompra(Compra compra) {
+        validaVendedor(compra.getVendedor());
+        validaCarro(compra.getCarro());
+        validaCompra(compra);
+    }
+    
+    private void validaVendedor(Vendedor vendedor) {
+        Vendedor vendedorSalvo = entityManager.find(Vendedor.class, vendedor.getId());
+        if (Objects.isNull(vendedorSalvo)) {
+            throw new RestException(new ErroMessage("Vendedor não encontrado!"), Response.Status.BAD_REQUEST);
+        }
+    }
+    
+    private void validaCarro(Carro carro) {
+        Carro carroSalvo = entityManager.find(Carro.class, carro.getId());
+        if (Objects.isNull(carroSalvo)) {
+            throw new RestException(new ErroMessage("Carro não encontrado!"), Response.Status.BAD_REQUEST);
+        }
+        if (carroSalvo.getVendido()) {
+            throw new RestException(new ErroMessage("Carro já foi vendido!"), Response.Status.BAD_REQUEST);
+        }
+    }
+    
+    private String validaCompra(Compra compra) {
+        if ((compra.getFormaPagamento() == FormaPagamento.A_PRAZO) && (compra.getDesconto().compareTo(BigDecimal.ZERO) == 1 )) {
+            throw new RestException(new ErroMessage("Desconto só pode ser aplicado à vista!"), Response.Status.BAD_REQUEST);
+        }
+        if (compra.getDataCompra().isAfter(LocalDate.now())) {
+            throw new RestException(new ErroMessage("A data da compra não pode ser futura!"), Response.Status.BAD_REQUEST);
+        }
+        return "";
+    }
+    
+    private void atualizaCarro(Compra compra) {
+        Carro carro = entityManager.find(Carro.class, compra.getCarro().getId());
+        carro.setVendido(true);
+        entityManager.merge(carro);
     }
     
 }

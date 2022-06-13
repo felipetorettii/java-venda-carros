@@ -4,12 +4,13 @@
  */
 package br.com.esucri.vendacarros.services;
 import br.com.esucri.vendacarros.entities.Vendedor;
+import br.com.esucri.vendacarros.exceptions.ErroMessage;
+import br.com.esucri.vendacarros.exceptions.RestException;
 import java.util.List;
+import java.util.Objects;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.ws.rs.NotFoundException;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 /**
@@ -23,47 +24,27 @@ public class VendedorService {
     private EntityManager entityManager;
 
     public Vendedor findById(Long id) {
-        Vendedor entity = entityManager.find(Vendedor.class, id);
-        
-        if(entity == null) {
-            throw new NotFoundException("Vendedor com o id " + id + " não encontrado");
+        Vendedor vendedor = entityManager.find(Vendedor.class, id);
+        if (Objects.isNull(vendedor)) {
+            throw new RestException(new ErroMessage("Vendedor não encontrado!"), Response.Status.NOT_FOUND);
         }
-        
-        return entity;
+        return vendedor;
     }
 
     public Vendedor add(Vendedor vendedor) {
-        validaCPF(vendedor);
-        validaTelefone(vendedor);
+        validaVendedor(vendedor);
         entityManager.persist(vendedor);
         return vendedor;
     }
-    
-    private void validaCPF(Vendedor vendedor) {
-        if(vendedor.getCpf().length() != 11) {
-            throw new WebApplicationException(
-                    "CPF inválido",
-                    Response.Status.CONFLICT
-            );   
-        }
-    }
-    
-    private void validaTelefone(Vendedor vendedor) {
-        if(vendedor.getTelefone().length() < 8) {
-            throw new WebApplicationException(
-                    "Telefone inválido",
-                    Response.Status.CONFLICT
-            );   
-        }
-    }
 
-    public void remove(Long id, Vendedor vendedor) {
+    public void remove(Long id) {
         entityManager.remove(findById(id));
     }
 
-    public Vendedor update(Vendedor vendedorAtualizado) {
-        validaCPF(vendedorAtualizado);
-        validaTelefone(vendedorAtualizado);
+    public Vendedor update(Long id, Vendedor vendedorAtualizado) {
+        validaVendedor(vendedorAtualizado);
+        Vendedor vendedorSalvo = findById(id);
+        vendedorAtualizado.setId(vendedorSalvo.getId());
         entityManager.merge(vendedorAtualizado);
         return vendedorAtualizado;
     }
@@ -75,10 +56,30 @@ public class VendedorService {
     }
 
     public List<Vendedor> search(String nome) {
+        if (Objects.isNull(nome)) {
+            throw new RestException(new ErroMessage("Parâmetro nome não informado!"), Response.Status.BAD_REQUEST);
+        }
         return entityManager
                 .createQuery("SELECT v FROM Vendedor v WHERE LOWER(v.nome) LIKE :nome", Vendedor.class)
                 .setParameter("nome", "%" + nome.toLowerCase() + "%")
                 .getResultList();
+    }
+    
+    private void validaVendedor(Vendedor vendedor) {
+        validaCPF(vendedor);
+        validaTelefone(vendedor);
+    }
+    
+    private void validaCPF(Vendedor vendedor) {
+        if (Objects.isNull(vendedor.getCpf()) || vendedor.getCpf().length() != 11) {
+            throw new RestException(new ErroMessage("CPF inválido!"), Response.Status.BAD_REQUEST);
+        }
+    }
+    
+    private void validaTelefone(Vendedor vendedor) {
+        if (Objects.isNull(vendedor.getTelefone()) || vendedor.getTelefone().length() < 8) {
+            throw new RestException(new ErroMessage("Telefone inválido!"), Response.Status.BAD_REQUEST);
+        }
     }
     
 }

@@ -17,7 +17,11 @@ public class CarroService {
     private EntityManager entityManager;
 
     public Carro findById(Long id) {
-        return entityManager.find(Carro.class, id);
+        Carro carro = entityManager.find(Carro.class, id);
+        if (carro == null) {
+            throw new RestException(new ErroMessage("Carro não encontrado!"), Response.Status.NOT_FOUND);
+        }
+        return carro;
     }
 
     public Carro add(Carro carro) {
@@ -26,28 +30,29 @@ public class CarroService {
         return carro;
     }
     
-    private String validaPreco(Carro carro) {
+    private void validaPreco(Carro carro) {
         if (carro.getPreco().compareTo(BigDecimal.ZERO) != 1) {
             throw new RestException(new ErroMessage("O preço do carro não pode ser menor ou igual a 0!"), Response.Status.BAD_REQUEST);
         }
-        return "";
     }
     
-    private String validaVendido(Carro carro) {
+    private void validaVendido(Carro carro) {
         if (carro.getVendido()) {
             throw new RestException(new ErroMessage("O carro já foi vendido não podendo ser excluido!"), Response.Status.BAD_REQUEST);
         }
-        return "";
     }
     
 
-    public void remove(Long id, Carro carro) {
+    public void remove(Long id) {
+        Carro carro = findById(id);
         validaVendido(carro);
-        entityManager.remove(findById(id));
+        entityManager.remove(carro);
     }
 
-    public Carro update(Carro carroAtualizado) {
+    public Carro update(Long id, Carro carroAtualizado) {
         validaPreco(carroAtualizado);
+        Carro carroSalvo = findById(id);
+        carroAtualizado.setId(carroSalvo.getId());
         entityManager.merge(carroAtualizado);
         return carroAtualizado;
     }
@@ -59,6 +64,9 @@ public class CarroService {
     }
 
     public List<Carro> search(String nome) {
+        if (Objects.isNull(nome)) {
+            throw new RestException(new ErroMessage("Parâmetro nome não informado!"), Response.Status.BAD_REQUEST);
+        }
         return entityManager
                 .createQuery("SELECT c FROM Carro c WHERE LOWER(c.nome) LIKE :nome", Carro.class)
                 .setParameter("nome", "%" + nome.toLowerCase() + "%")

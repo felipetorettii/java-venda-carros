@@ -8,7 +8,6 @@ import br.com.esucri.vendacarros.services.VendedorService;
 import br.com.esucri.vendacarros.entities.Vendedor;
 import java.util.List;
 import javax.inject.Inject;
-import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -18,9 +17,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 /**
  *
@@ -42,11 +39,7 @@ public class VendedorController {
     @GET
     @Path("{id}")
     public Vendedor findById(@PathParam("id") Long id) {
-        Vendedor vendedor = this.vendedorService.findById(id);
-        if (vendedor == null) {
-            throw new WebApplicationException("Vendedor não encontrado!", Response.Status.NOT_FOUND);
-        }
-        return vendedor;
+        return this.vendedorService.findById(id);
     }
 
     @POST
@@ -57,30 +50,18 @@ public class VendedorController {
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Long id) {
-        Vendedor vendedor = this.vendedorService.findById(id);
-        if (vendedor == null) {
-            throw new WebApplicationException("Vendedor não encontrado!", Response.Status.NOT_FOUND);
-        }
-        this.vendedorService.remove(id, vendedor);
+        this.vendedorService.remove(id);
     }
 
     @PUT
     @Path("{id}")
     public Vendedor update(@PathParam("id") Long id, Vendedor vendedorAtualizado) {
-        Vendedor vendedorSalvo = findById(id);
-        if (vendedorSalvo == null) {
-            throw new WebApplicationException("Vendedor não encontrado!", Response.Status.NOT_FOUND);
-        }
-        vendedorAtualizado.setId(vendedorSalvo.getId());
-        return this.vendedorService.update(vendedorAtualizado);
+        return this.vendedorService.update(id, vendedorAtualizado);
     }
 
     @GET
     @Path("search")
     public List<Vendedor> search(@QueryParam("nome") String nome) {
-        if(nome == null) {
-            throw new BadRequestException("Paramêtro nome não informado!");
-        }
         return this.vendedorService.search(nome);
     }
 }

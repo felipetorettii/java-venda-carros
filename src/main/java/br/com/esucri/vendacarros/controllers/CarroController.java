@@ -34,11 +34,7 @@ public class CarroController {
     @GET
     @Path("{id}")
     public Carro findById(@PathParam("id") Long id) {
-        Carro carro = this.carroService.findById(id);
-        if (carro == null) {
-            throw new WebApplicationException("Carro não encontrado!", Response.Status.NOT_FOUND);
-        }
-        return carro;
+        return  this.carroService.findById(id);
     }
 
     @POST
@@ -49,30 +45,18 @@ public class CarroController {
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Long id) {
-        Carro carroSalvo = findById(id);
-        if (carroSalvo == null) {
-            throw new WebApplicationException("Carro não encontrado!", Response.Status.NOT_FOUND);
-        }
-        this.carroService.remove(id, carroSalvo);
+        this.carroService.remove(id);
     }
 
     @PUT
     @Path("{id}")
     public Carro update(@PathParam("id") Long id, Carro carroAtualizado) {
-        Carro carroSalvo = findById(id);
-        if (carroSalvo == null) {
-            throw new WebApplicationException("Carro não encontrado!", Response.Status.NOT_FOUND);
-        }
-        carroAtualizado.setId(carroSalvo.getId());
-        return this.carroService.update(carroAtualizado);
+        return this.carroService.update(id, carroAtualizado);
     }
 
     @GET
     @Path("search")
     public List<Carro> search(@QueryParam("nome") String nome) {
-        if(nome == null) {
-            throw new BadRequestException("Paramêtro nome não informado!");
-        }
         return this.carroService.search(nome);
     }
 }
