@@ -5,7 +5,6 @@ import br.com.esucri.vendacarros.exceptions.ErroMessage;
 import br.com.esucri.vendacarros.exceptions.RestException;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Objects;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
