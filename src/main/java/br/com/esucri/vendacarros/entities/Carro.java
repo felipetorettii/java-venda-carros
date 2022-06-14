@@ -38,7 +38,7 @@ public class Carro implements Serializable {
     @Column(nullable = false)
     private Boolean vendido;
     
-    @Column
+    @Column(length = 10000)
     private String foto;
 
     public Carro() {

@@ -39,7 +39,7 @@ public class Vendedor implements Serializable{
     @Column(nullable = false)
     private String endereco;
     
-    @Column
+    @Column(length = 10000)
     private String foto;
 
     public Vendedor() {
