@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package br.com.esucri.vendacarros.services;
+import br.com.esucri.vendacarros.entities.Compra;
 import br.com.esucri.vendacarros.entities.Vendedor;
 import br.com.esucri.vendacarros.exceptions.ErroMessage;
 import br.com.esucri.vendacarros.exceptions.RestException;
@@ -38,6 +39,11 @@ public class VendedorService {
     }
 
     public void remove(Long id) {
+        if (!buscarCompraPorVendedor(id).isEmpty()) {
+            throw new RestException(new ErroMessage(
+                    "Vendedor possui vendas e não pode ser excluído!"),
+                    Response.Status.BAD_REQUEST);
+        }
         entityManager.remove(findById(id));
     }
 
@@ -62,6 +68,13 @@ public class VendedorService {
         return entityManager
                 .createQuery("SELECT v FROM Vendedor v WHERE LOWER(v.nome) LIKE :nome", Vendedor.class)
                 .setParameter("nome", "%" + nome.toLowerCase() + "%")
+                .getResultList();
+    }
+    
+    private List<Compra> buscarCompraPorVendedor(Long idVendedor) {
+        return entityManager
+                .createQuery("SELECT c FROM Compra c WHERE c.vendedor.id = :id", Compra.class)
+                .setParameter("id", idVendedor)
                 .getResultList();
     }
     

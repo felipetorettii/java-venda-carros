@@ -8,6 +8,7 @@ import br.com.esucri.vendacarros.exceptions.ErroMessage;
 import br.com.esucri.vendacarros.exceptions.RestException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.ejb.Stateless;
@@ -56,6 +57,27 @@ public class CompraService {
                 .createQuery("SELECT c FROM Compra c", Compra.class)
                 .getResultList();
     }
+    
+    public List<Long> findForDash() {
+        List<Compra> compras = entityManager
+                .createQuery("SELECT c FROM Compra c", Compra.class)
+                .getResultList();
+        List<Long> vendasPorMes = new ArrayList<>();
+        initializeList(vendasPorMes);
+        compras.forEach(c -> {
+            Integer mesDaCompra = c.getDataCompra().getMonthValue()-1;
+            Long incVendaMes = vendasPorMes.get(mesDaCompra)+1;
+            vendasPorMes.set(mesDaCompra, incVendaMes);
+        });
+        return vendasPorMes;
+    }
+    
+    private void initializeList(List<Long> lista) {
+        for (int i = 1; i <= 12; i++) {
+            lista.add(0L);
+        }
+    }
+     
     
     private void validacoesCompra(Compra compra) {
         validaVendedor(compra.getVendedor());

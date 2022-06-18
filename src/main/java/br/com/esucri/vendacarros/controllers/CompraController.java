@@ -34,6 +34,12 @@ public class CompraController {
     public List<Compra> findAll() {
         return this.compraService.findAll();
     }
+    
+    @GET
+    @Path("dash")
+    public List<Long> findForDash() {
+        return this.compraService.findForDash();
+    }
 
     @GET
     @Path("{id}")
