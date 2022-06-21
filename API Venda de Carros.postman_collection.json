@@ -1,0 +1,458 @@
+{
+	"info": {
+		"_postman_id": "2897c913-9b4a-41b0-adae-ab018ef7f1eb",
+		"name": "API Venda de Carros",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Carros",
+			"item": [
+				{
+					"name": "Buscar todos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/vendacarros/api/carros",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vendacarros",
+								"api",
+								"carros"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/vendacarros/api/carros/104",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vendacarros",
+								"api",
+								"carros",
+								"104"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Novo carro",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Versa\",\r\n    \"tipoCarro\": \"HATCH\",\r\n    \"preco\": 100.50,\r\n    \"ano\": 2012,\r\n    \"vendido\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/vendacarros/api/carros",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vendacarros",
+								"api",
+								"carros"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar carro",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Gol\",\r\n    \"tipoCarro\": \"HATCH\",\r\n    \"preco\": 100.50,\r\n    \"ano\": 2012,\r\n    \"vendido\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/vendacarros/api/carros/103",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vendacarros",
+								"api",
+								"carros",
+								"103"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar por nome",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/vendacarros/api/carros/search?nome=Go",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vendacarros",
+								"api",
+								"carros",
+								"search"
+							],
+							"query": [
+								{
+									"key": "nome",
+									"value": "Go"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar por ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/vendacarros/api/carros/102",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vendacarros",
+								"api",
+								"carros",
+								"102"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Vendedores",
+			"item": [
+				{
+					"name": "Buscar todos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/vendacarros/api/vendedores",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vendacarros",
+								"api",
+								"vendedores"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/vendacarros/api/vendedores/53",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vendacarros",
+								"api",
+								"vendedores",
+								"53"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Novo vendedor",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Henrique\",\r\n    \"cpf\": \"11111111111\",\r\n    \"telefone\": \"48999999999\",\r\n    \"endereco\": \"Rua teste\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/vendacarros/api/vendedores",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vendacarros",
+								"api",
+								"vendedores"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar vendedor",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Henrique\",\r\n    \"cpf\": \"33333333333\",\r\n    \"telefone\": \"48999999999\",\r\n    \"endereco\": \"Rua teste\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/vendacarros/api/vendedores/53",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vendacarros",
+								"api",
+								"vendedores",
+								"53"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar por nome",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/vendacarros/api/vendedores/search?nome=f",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vendacarros",
+								"api",
+								"vendedores",
+								"search"
+							],
+							"query": [
+								{
+									"key": "nome",
+									"value": "f"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar por ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/vendacarros/api/vendedores/53",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vendacarros",
+								"api",
+								"vendedores",
+								"53"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Compras",
+			"item": [
+				{
+					"name": "Buscar todos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/vendacarros/api/compras",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vendacarros",
+								"api",
+								"compras"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/vendacarros/api/compras/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vendacarros",
+								"api",
+								"compras",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Nova compra",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"formaPagamento\": \"A_VISTA\",\r\n    \"desconto\": 1,\r\n    \"dataCompra\": \"2022-06-07\",\r\n    \"carro\": {\r\n        \"id\":104\r\n    },\r\n    \"vendedor\": {\r\n        \"id\": 54\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/vendacarros/api/compras",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vendacarros",
+								"api",
+								"compras"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar compra",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"formaPagamento\": \"A_PRAZO\",\r\n    \"desconto\": 4,\r\n    \"dataCompra\": \"2022-01-01\",\r\n    \"carro\": {\r\n        \"id\": 104\r\n    },\r\n    \"vendedor\": {\r\n        \"id\": 54\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/vendacarros/api/compras/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vendacarros",
+								"api",
+								"compras",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar por ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/vendacarros/api/compras/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vendacarros",
+								"api",
+								"compras",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
